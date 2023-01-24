@@ -449,12 +449,6 @@ TraceablePeerConnection.prototype._processStat
  * Returns a string representation of a SessionDescription object.
  */
 const dumpSDP = function(description) {
-	if (this.isP2P) {
-		logger.info(`inytelog dumpSDP description, P2P`);
-	} else {
-		logger.info(`inytelog dumpSDP description, JVB`);
-	}
-	
     if (typeof description === 'undefined' || description === null) {
         return '';
     }
@@ -472,11 +466,6 @@ const dumpSDP = function(description) {
  * @return {string}
  */
 TraceablePeerConnection.prototype.getConnectionState = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog getConnectionState, P2P`);
-	} else {
-		logger.info(`inytelog getConnectionState, JVB`);
-	}
     const state = this.peerconnection.iceConnectionState;
 
     if (state === 'completed') {
@@ -498,11 +487,6 @@ TraceablePeerConnection.prototype.getConnectionState = function() {
  * @private
  */
 TraceablePeerConnection.prototype.getDesiredMediaDirection = function(mediaType, isAddOperation = false) {
-	if (this.isP2P) {
-		logger.info(`inytelog getDesiredMediaDirection, P2P`);
-	} else {
-		logger.info(`inytelog getDesiredMediaDirection, JVB`);
-	}
     const hasLocalSource = this.hasAnyTracksOfType(mediaType);
 
     if (this._usesUnifiedPlan) {
@@ -528,11 +512,6 @@ TraceablePeerConnection.prototype.getDesiredMediaDirection = function(mediaType,
  * @returns {Array<RTCRtpReceiver>} list of receivers created by the peerconnection.
  */
 TraceablePeerConnection.prototype._getReceiversByEndpointIds = function(endpoints, mediaType) {
-	if (this.isP2P) {
-		logger.info(`inytelog getReceiversByEndpointIds, P2P`);
-	} else {
-		logger.info(`inytelog getReceiversByEndpointIds, JVB`);
-	}
     let remoteTracks = [];
     let receivers = [];
 
@@ -557,11 +536,6 @@ TraceablePeerConnection.prototype._getReceiversByEndpointIds = function(endpoint
  * <tt>false</tt> if it's turned off.
  */
 TraceablePeerConnection.prototype.isSimulcastOn = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog isSimulcastOn, P2P`);
-	} else {
-		logger.info(`inytelog isSimulcastOn, JVB`);
-	}
     return !this.options.disableSimulcast;
 };
 
@@ -572,11 +546,6 @@ TraceablePeerConnection.prototype.isSimulcastOn = function() {
  * @private
  */
 TraceablePeerConnection.prototype._peerVideoTypeChanged = function(endpointId, videoType) {
-	if (this.isP2P) {
-		logger.info(`inytelog peerVideoTypeChanged, P2P`);
-	} else {
-		logger.info(`inytelog peerVideoTypeChanged, JVB`);
-	}
     // Check if endpointId has a value to avoid action on random track
     if (!endpointId) {
         logger.error(`${this} No endpointID on peerVideoTypeChanged`);
@@ -599,11 +568,6 @@ TraceablePeerConnection.prototype._peerVideoTypeChanged = function(endpointId, v
  * @private
  */
 TraceablePeerConnection.prototype._peerMutedChanged = function(endpointId, mediaType, isMuted) {
-	if (this.isP2P) {
-		logger.info(`inytelog peerMutedChanged, P2P`);
-	} else {
-		logger.info(`inytelog peerMutedChanged, JVB`);
-	}
     // Check if endpointId is a value to avoid doing action on all remote tracks
     if (!endpointId) {
         logger.error(`${this} On peerMuteChanged - no endpoint ID`);
@@ -625,11 +589,6 @@ TraceablePeerConnection.prototype._peerMutedChanged = function(endpointId, media
  * @param {boolean} isMuted - The new mute state.
  */
 TraceablePeerConnection.prototype._sourceMutedChanged = function(sourceName, isMuted) {
-	if (this.isP2P) {
-		logger.info(`inytelog sourceMutedChanged, P2P`);
-	} else {
-		logger.info(`inytelog sourceMutedChanged, JVB`);
-	}
     const track = this.getRemoteTracks().find(t => t.getSourceName() === sourceName);
 
     if (!track) {
@@ -646,11 +605,6 @@ TraceablePeerConnection.prototype._sourceMutedChanged = function(sourceName, isM
  * @param {boolean} isMuted - The new value.
  */
 TraceablePeerConnection.prototype._sourceVideoTypeChanged = function(sourceName, videoType) {
-	if (this.isP2P) {
-		logger.info(`inytelog sourceVideoTypeChanged, P2P`);
-	} else {
-		logger.info(`inytelog sourceVideoTypeChanged, JVB`);
-	}
     const track = this.getRemoteTracks().find(t => t.getSourceName() === sourceName);
 
     if (!track) {
@@ -667,11 +621,6 @@ TraceablePeerConnection.prototype._sourceVideoTypeChanged = function(sourceName,
  * @returns {Object} containing ssrc and audio level information as a key-value pair.
  */
 TraceablePeerConnection.prototype.getAudioLevels = function(speakerList = []) {
-	if (this.isP2P) {
-		logger.info(`inytelog getAudioLevels, P2P`);
-	} else {
-		logger.info(`inytelog getAudioLevels, JVB`);
-	}
     const audioLevels = {};
     const audioReceivers = speakerList.length
         ? this._getReceiversByEndpointIds(speakerList, MediaType.AUDIO)
@@ -700,11 +649,6 @@ TraceablePeerConnection.prototype.getAudioLevels = function(speakerList = []) {
  * @return {Array<JitsiLocalTrack>}
  */
 TraceablePeerConnection.prototype.getLocalTracks = function(mediaType) {
-	if (this.isP2P) {
-		logger.info(`inytelog getLocalTracks, P2P`);
-	} else {
-		logger.info(`inytelog getLocalTracks, JVB`);
-	}
     let tracks = Array.from(this.localTracks.values());
 
     if (mediaType !== undefined) {
@@ -720,11 +664,6 @@ TraceablePeerConnection.prototype.getLocalTracks = function(mediaType) {
  * @returns {Array<JitsiLocalTrack>} - local video tracks.
  */
 TraceablePeerConnection.prototype.getLocalVideoTracks = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog getLocalVideoTracks, P2P`);
-	} else {
-		logger.info(`inytelog getLocalVideoTracks, JVB`);
-	}
     return this.getLocalTracks(MediaType.VIDEO);
 };
 
@@ -736,11 +675,6 @@ TraceablePeerConnection.prototype.getLocalVideoTracks = function() {
  * @return {boolean}
  */
 TraceablePeerConnection.prototype.hasAnyTracksOfType = function(mediaType) {
-	if (this.isP2P) {
-		logger.info(`inytelog hasAnyTracksOfType, P2P`);
-	} else {
-		logger.info(`inytelog hasAnyTracksOfType, JVB`);
-	}
     if (!mediaType) {
         throw new Error('"mediaType" is required');
     }
@@ -757,11 +691,6 @@ TraceablePeerConnection.prototype.hasAnyTracksOfType = function(mediaType) {
  * @return {Array<JitsiRemoteTrack>}
  */
 TraceablePeerConnection.prototype.getRemoteTracks = function(endpointId, mediaType) {
-	if (this.isP2P) {
-		logger.info(`inytelog getRemoteTracks, P2P`);
-	} else {
-		logger.info(`inytelog getRemoteTracks, JVB`);
-	}
     let remoteTracks = [];
     const endpoints = endpointId ? [ endpointId ] : this.remoteTracks.keys();
 
@@ -788,11 +717,6 @@ TraceablePeerConnection.prototype.getRemoteTracks = function(endpointId, mediaTy
  * @returns {Array<string>} The sdp lines that have the ssrc information.
  */
 TraceablePeerConnection.prototype.getRemoteSourceInfoByParticipant = function(id) {
-	if (this.isP2P) {
-		logger.info(`inytelog getRemoteSourceInfoByParticipant, P2P`);
-	} else {
-		logger.info(`inytelog getRemoteSourceInfoByParticipant, JVB`);
-	}
     const removeSsrcInfo = [];
     const remoteTracks = this.getRemoteTracks(id);
 
@@ -836,11 +760,6 @@ TraceablePeerConnection.prototype.getRemoteSourceInfoByParticipant = function(id
  * @returns {Object}
  */
 TraceablePeerConnection.prototype.getTargetVideoBitrates = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog getTargetVideoBitrates, P2P`);
-	} else {
-		logger.info(`inytelog getTargetVideoBitrates, JVB`);
-	}
     const currentCodec = this.getConfiguredVideoCodec();
 
     return this.tpcUtils.videoBitrates[currentCodec.toUpperCase()] || this.tpcUtils.videoBitrates;
@@ -853,11 +772,6 @@ TraceablePeerConnection.prototype.getTargetVideoBitrates = function() {
  * @return {JitsiTrack|null}
  */
 TraceablePeerConnection.prototype.getTrackBySSRC = function(ssrc) {
-	if (this.isP2P) {
-		logger.info(`inytelog getTrackBySSRC, P2P`);
-	} else {
-		logger.info(`inytelog getTrackBySSRC, JVB`);
-	}
     if (typeof ssrc !== 'number') {
         throw new Error(`SSRC ${ssrc} is not a number`);
     }
@@ -882,11 +796,6 @@ TraceablePeerConnection.prototype.getTrackBySSRC = function(ssrc) {
  * @return {number|null}
  */
 TraceablePeerConnection.prototype.getSsrcByTrackId = function(id) {
-	if (this.isP2P) {
-		logger.info(`inytelog getSsrcByTrackId, P2P`);
-	} else {
-		logger.info(`inytelog getSsrcByTrackId, JVB`);
-	}
 
     const findTrackById = track => track.getTrack().id === id;
     const localTrack = this.getLocalTracks().find(findTrackById);
@@ -909,11 +818,6 @@ TraceablePeerConnection.prototype.getSsrcByTrackId = function(id) {
  * @param {MediaStream} stream the WebRTC MediaStream for remote participant
  */
 TraceablePeerConnection.prototype._remoteStreamAdded = function(stream) {
-	if (this.isP2P) {
-		logger.info(`inytelog remoteStreamAdded, P2P`);
-	} else {
-		logger.info(`inytelog remoteStreamAdded, JVB`);
-	}
     const streamId = RTC.getStreamID(stream);
 
     if (!RTC.isUserStreamById(streamId)) {
@@ -958,11 +862,6 @@ TraceablePeerConnection.prototype._remoteStreamAdded = function(stream) {
  * for the remote participant in unified plan.
  */
 TraceablePeerConnection.prototype._remoteTrackAdded = function(stream, track, transceiver = null) {
-	if (this.isP2P) {
-		logger.info(`inytelog remoteTrackAdded, P2P`);
-	} else {
-		logger.info(`inytelog remoteTrackAdded, JVB`);
-	}
     const streamId = RTC.getStreamID(stream);
     const mediaType = track.kind;
 
@@ -1161,11 +1060,6 @@ TraceablePeerConnection.prototype._createRemoteTrack = function(
  * PeerConnection
  */
 TraceablePeerConnection.prototype._remoteStreamRemoved = function(stream) {
-	if (this.isP2P) {
-		logger.info(`inytelog remoteStreamRemoved, P2P`);
-	} else {
-		logger.info(`inytelog remoteStreamRemoved, JVB`);
-	}
     if (!RTC.isUserStream(stream)) {
         const id = RTC.getStreamID(stream);
 
@@ -1195,11 +1089,6 @@ TraceablePeerConnection.prototype._remoteStreamRemoved = function(stream) {
  * @returns {void}
  */
 TraceablePeerConnection.prototype._remoteTrackRemoved = function(stream, track) {
-	if (this.isP2P) {
-		logger.info(`inytelog remoteTrackRemoved, P2P`);
-	} else {
-		logger.info(`inytelog remoteTrackRemoved, JVB`);
-	}
     const streamId = RTC.getStreamID(stream);
     const trackId = track && RTC.getTrackID(track);
 
@@ -1242,11 +1131,6 @@ TraceablePeerConnection.prototype._remoteTrackRemoved = function(stream, track) 
  * @returns {JitsiRemoteTrack[]} - The array of removed tracks.
  */
 TraceablePeerConnection.prototype.removeRemoteTracks = function(owner) {
-	if (this.isP2P) {
-		logger.info(`inytelog removeRemoteTracks, P2P`);
-	} else {
-		logger.info(`inytelog removeRemoteTracks, JVB`);
-	}
     let removedTracks = [];
     const remoteTracksByMedia = this.remoteTracks.get(owner);
 
@@ -1267,11 +1151,6 @@ TraceablePeerConnection.prototype.removeRemoteTracks = function(owner) {
  * @returns {void}
  */
 TraceablePeerConnection.prototype._removeRemoteTrack = function(toBeRemoved) {
-	if (this.isP2P) {
-		logger.info(`inytelog removeRemoteTrack, P2P`);
-	} else {
-		logger.info(`inytelog removeRemoteTrack, JVB`);
-	}
     toBeRemoved.dispose();
     const participantId = toBeRemoved.getParticipantId();
     const userTracksByMediaType = this.remoteTracks.get(participantId);
@@ -1527,11 +1406,6 @@ function replaceDefaultUnifiedPlanMsid(ssrcLines = []) {
  * @param {object} options <tt>TracablePeerConnection</tt> config options.
  */
 const enforceSendRecv = function(localDescription, options) {
-	if (this.isP2P) {
-		logger.info(`inytelog localDescription, P2P`);
-	} else {
-		logger.info(`inytelog localDescription, JVB`);
-	}
     if (!localDescription) {
         throw new Error('No local description passed in.');
     }
@@ -1572,11 +1446,6 @@ const enforceSendRecv = function(localDescription, options) {
  * @param {JitsiLocalTrack} localTrack
  */
 TraceablePeerConnection.prototype.getLocalSSRC = function(localTrack) {
-	if (this.isP2P) {
-		logger.info(`inytelog getLocalSSRC, P2P`);
-	} else {
-		logger.info(`inytelog getLocalSSRC, JVB`);
-	}
     const ssrcInfo = this._getSSRC(localTrack.rtcId);
 
     return ssrcInfo && ssrcInfo.ssrcs[0];
@@ -1591,11 +1460,6 @@ TraceablePeerConnection.prototype.getLocalSSRC = function(localTrack) {
  * @return A session description object with its sdp field modified to contain an inject ssrc-group for simulcast.
  */
 TraceablePeerConnection.prototype._injectSsrcGroupForUnifiedSimulcast = function(desc) {
-	if (this.isP2P) {
-		logger.info(`inytelog injectSsrcGroupForUnifiedSimulcast, P2P`);
-	} else {
-		logger.info(`inytelog injectSsrcGroupForUnifiedSimulcast, JVB`);
-	}
     const sdp = transform.parse(desc.sdp);
     const video = sdp.media.find(mline => mline.type === 'video');
 
@@ -1729,11 +1593,6 @@ Object.keys(getters).forEach(prop => {
 });
 
 TraceablePeerConnection.prototype._getSSRC = function(rtcId) {
-	if (this.isP2P) {
-		logger.info(`inytelog getSSRC, P2P`);
-	} else {
-		logger.info(`inytelog getSSRC, JVB`);
-	}
     return this.localSSRCs.get(rtcId);
 };
 
@@ -1768,11 +1627,6 @@ TraceablePeerConnection.prototype._isSharingScreen = function() {
  * @returns {RTCSessionDescription} the munged description.
  */
 TraceablePeerConnection.prototype._mungeCodecOrder = function(description) {
-	if (this.isP2P) {
-		logger.info(`inytelog mungeCodecOrder, P2P`);
-	} else {
-		logger.info(`inytelog mungeCodecOrder, JVB`);
-	}
 	logger.info(` inytelog mungecodecorder codecprefernce not set`);
     if (!this.codecPreference) {
         return description;
@@ -1816,11 +1670,6 @@ TraceablePeerConnection.prototype._mungeCodecOrder = function(description) {
  * @returns {Promise<void>} - resolved when done.
  */
 TraceablePeerConnection.prototype.addTrack = function(track, isInitiator = false) {
-	if (this.isP2P) {
-		logger.info(`inytelog addTrack, P2P`);
-	} else {
-		logger.info(`inytelog addTrack, JVB`);
-	}
     const rtcId = track.rtcId;
 
     logger.info(`${this} adding ${track}`);
@@ -1908,11 +1757,6 @@ TraceablePeerConnection.prototype.addTrack = function(track, isInitiator = false
  * Promise is rejected when something goes wrong.
  */
 TraceablePeerConnection.prototype.addTrackUnmute = function(track) {
-	if (this.isP2P) {
-		logger.info(`inytelog addTrackUnmute, P2P`);
-	} else {
-		logger.info(`inytelog addTrackUnmute, JVB`);
-	}
     logger.info(`${this} Adding track=${track} as unmute`);
 
     if (!this._assertTrackBelongs('addTrackUnmute', track)) {
@@ -1948,53 +1792,12 @@ TraceablePeerConnection.prototype.addTrackUnmute = function(track) {
     return Promise.resolve(true);
 };
 
-/////////////// inytechange setting bandidth //////////////////
-
-TraceablePeerConnection.prototype._setBandWithForVideo = function(description, isLocalSDP = false) {
-	if (this.isP2P) {
-		logger.log(`inytelog _setBandWithForVideo, P2P`);
-	} else {
-		logger.log(`inytelog _setBandWithForVideo, JVB`);
-	}
-
-   if (this.isP2P) {
-      logger.log(`inytelog, in P2P setBandWidth`);
-     const customParsedSDP = transform.parse(description.sdp);
-     const direction = isLocalSDP ? MediaDirection.RECVONLY : MediaDirection.SENDONLY;
-     const mLines = customParsedSDP.media.filter(m => m.type === MediaType.VIDEO && m.direction !== direction)
-     const limit = 900
-       for (const mLine of mLines) {
-         mLine.bandwidth = [{
-           type: 'AS',
-           limit
-         }];
-       }
-
-       return new RTCSessionDescription ({
-         type: description.type,
-         sdp: transform.write(customParsedSDP)
-       });
-
-   }else {
-     return new RTCSessionDescription ({
-       type: description.type,
-       sdp: transform.write(description)
-     });
-   }
-};
-////////////////////////
-
 /**
  * Adds WebRTC media stream to the underlying PeerConnection
  * @param {MediaStream} mediaStream
  * @private
  */
 TraceablePeerConnection.prototype._addStream = function(mediaStream) {
-	if (this.isP2P) {
-		logger.info(`inytelog addStream, P2P`);
-	} else {
-		logger.info(`inytelog addStream, JVB`);
-	}
     this.peerconnection.addStream(mediaStream);
     this._addedStreams.push(mediaStream);
 };
@@ -2004,11 +1807,6 @@ TraceablePeerConnection.prototype._addStream = function(mediaStream) {
  * @param {MediaStream} mediaStream
  */
 TraceablePeerConnection.prototype._removeStream = function(mediaStream) {
-	if (this.isP2P) {
-		logger.info(`inytelog removeStream, P2P`);
-	} else {
-		logger.info(`inytelog removeStream, JVB`);
-	}
     this.peerconnection.removeStream(mediaStream);
     this._addedStreams
         = this._addedStreams.filter(stream => stream !== mediaStream);
@@ -2026,11 +1824,6 @@ TraceablePeerConnection.prototype._removeStream = function(mediaStream) {
  * @private
  */
 TraceablePeerConnection.prototype._assertTrackBelongs = function(
-	if (this.isP2P) {
-		logger.info(`inytelog assertTrackBelongs, P2P`);
-	} else {
-		logger.info(`inytelog assertTrackBelongs, JVB`);
-	}
         methodName,
         localTrack) {
     const doesBelong = this.localTracks.has(localTrack?.rtcId);
@@ -2050,11 +1843,6 @@ TraceablePeerConnection.prototype._assertTrackBelongs = function(
  * video in the local SDP.
  */
 TraceablePeerConnection.prototype.getConfiguredVideoCodec = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog getConfiguredVideoCodec, P2P`);
-	} else {
-		logger.info(`inytelog getConfiguredVideoCodec, JVB`);
-	}
     const sdp = this.peerconnection.localDescription?.sdp;
     const defaultCodec = CodecMimeType.VP8;
 
@@ -2078,11 +1866,6 @@ TraceablePeerConnection.prototype.getConfiguredVideoCodec = function() {
  * @param {number} maxFps framerate to be used for desktop track capture.
  */
 TraceablePeerConnection.prototype.setDesktopSharingFrameRate = function(maxFps) {
-	if (this.isP2P) {
-		logger.info(`inytelog setDesktopSharingFrameRate, P2P`);
-	} else {
-		logger.info(`inytelog setDesktopSharingFrameRate, JVB`);
-	}
     const lowFps = maxFps <= SS_DEFAULT_FRAME_RATE;
 
     this._capScreenshareBitrate = this.isSimulcastOn() && lowFps;
@@ -2097,11 +1880,6 @@ TraceablePeerConnection.prototype.setDesktopSharingFrameRate = function(maxFps) 
  * @returns {void}
  */
 TraceablePeerConnection.prototype.setVideoCodecs = function(preferredCodec = null, disabledCodec = null) {
-	if (this.isP2P) {
-		logger.info(`inytelog setVideoCodecs, P2P`);
-	} else {
-		logger.info(`inytelog setVideoCodecs, JVB`);
-	}
     // If both enable and disable are set, disable settings will prevail.
     const enable = disabledCodec === null;
     const mimeType = disabledCodec ? disabledCodec : preferredCodec;
@@ -2128,11 +1906,6 @@ TraceablePeerConnection.prototype.setVideoCodecs = function(preferredCodec = nul
  * @returns {boolean}
  */
 TraceablePeerConnection.prototype.isMediaStreamInPc = function(mediaStream) {
-	if (this.isP2P) {
-		logger.info(`inytelog isMediaStreamInPc, P2P`);
-	} else {
-		logger.info(`inytelog isMediaStreamInPc, JVB`);
-	}
     return this._addedStreams.indexOf(mediaStream) > -1;
 };
 
@@ -2144,11 +1917,6 @@ TraceablePeerConnection.prototype.isMediaStreamInPc = function(mediaStream) {
  *       The same applies to addTrack.
  */
 TraceablePeerConnection.prototype.removeTrack = function(localTrack) {
-	if (this.isP2P) {
-		logger.info(`inytelog removeTrack, P2P`);
-	} else {
-		logger.info(`inytelog removeTrack, JVB`);
-	}
     const webRtcStream = localTrack.getOriginalStream();
 
     this.trace(
@@ -2174,11 +1942,6 @@ TraceablePeerConnection.prototype.removeTrack = function(localTrack) {
  * was found.
  */
 TraceablePeerConnection.prototype.findSenderByKind = function(mediaType) {
-	if (this.isP2P) {
-		logger.info(`inytelog findSenderByKind, P2P`);
-	} else {
-		logger.info(`inytelog findSenderByKind, JVB`);
-	}
     if (this.peerconnection.getSenders) {
         return this.peerconnection.getSenders().find(s => s.track && s.track.kind === mediaType);
     }
@@ -2192,11 +1955,6 @@ TraceablePeerConnection.prototype.findSenderByKind = function(mediaType) {
  * was found.
  */
 TraceablePeerConnection.prototype.findReceiverForTrack = function(track) {
-	if (this.isP2P) {
-		logger.info(`inytelog findReceiverForTrack, P2P`);
-	} else {
-		logger.info(`inytelog findReceiverForTrack, JVB`);
-	}
     return this.peerconnection.getReceivers().find(r => r.track === track);
 };
 
@@ -2208,11 +1966,6 @@ TraceablePeerConnection.prototype.findReceiverForTrack = function(track) {
  * was found.
  */
 TraceablePeerConnection.prototype.findSenderForTrack = function(track) {
-	if (this.isP2P) {
-		logger.info(`inytelog findSenderForTrack, P2P`);
-	} else {
-		logger.info(`inytelog findSenderForTrack, JVB`);
-	}
     if (this.peerconnection.getSenders) {
         return this.peerconnection.getSenders().find(s => s.track === track);
     }
@@ -2231,11 +1984,6 @@ TraceablePeerConnection.prototype.findSenderForTrack = function(track) {
  * Otherwise no renegotiation is needed.
  */
 TraceablePeerConnection.prototype.replaceTrack = function(oldTrack, newTrack) {
-	if (this.isP2P) {
-		logger.info(`inytelog replaceTrack, P2P`);
-	} else {
-		logger.info(`inytelog replaceTrack, JVB`);
-	}
     if (!(oldTrack || newTrack)) {
         logger.info(`${this} replaceTrack called with no new track and no old track`);
 
@@ -2350,11 +2098,6 @@ TraceablePeerConnection.prototype.replaceTrack = function(oldTrack, newTrack) {
  * Promise is rejected when something goes wrong.
  */
 TraceablePeerConnection.prototype.removeTrackMute = function(localTrack) {
-	if (this.isP2P) {
-		logger.info(`inytelog removeTrackMute, P2P`);
-	} else {
-		logger.info(`inytelog removeTrackMute, JVB`);
-	}
     const webRtcStream = localTrack.getOriginalStream();
 
     this.trace('removeTrackMute', localTrack.rtcId, webRtcStream ? webRtcStream.id : null);
@@ -2381,11 +2124,6 @@ TraceablePeerConnection.prototype.removeTrackMute = function(localTrack) {
 };
 
 TraceablePeerConnection.prototype.createDataChannel = function(label, opts) {
-	if (this.isP2P) {
-		logger.info(`inytelog createDataChannel, P2P`);
-	} else {
-		logger.info(`inytelog createDataChannel, JVB`);
-	}
     this.trace('createDataChannel', label, opts);
 
     return this.peerconnection.createDataChannel(label, opts);
@@ -2400,11 +2138,6 @@ TraceablePeerConnection.prototype.createDataChannel = function(label, opts) {
  * @private
  */
 TraceablePeerConnection.prototype._ensureSimulcastGroupIsLast = function(localSdp) {
-	if (this.isP2P) {
-		logger.info(`inytelog ensureSimulcastGroupIsLast, P2P`);
-	} else {
-		logger.info(`inytelog ensureSimulcastGroupIsLast, JVB`);
-	}
     let sdpStr = localSdp.sdp;
 
     const videoStartIndex = sdpStr.indexOf('m=video');
@@ -2444,11 +2177,6 @@ TraceablePeerConnection.prototype._ensureSimulcastGroupIsLast = function(localSd
  * @private
  */
 TraceablePeerConnection.prototype._adjustLocalMediaDirection = function(localDescription) {
-	if (this.isP2P) {
-		logger.info(`inytelog adjustLocalMediaDirection, P2P`);
-	} else {
-		logger.info(`inytelog adjustLocalMediaDirection, JVB`);
-	}
     const transformer = new SdpTransformWrap(localDescription.sdp);
     let modifiedDirection = false;
     const audioMedia = transformer.selectMedia(MediaType.AUDIO)?.[0];
@@ -2498,11 +2226,6 @@ TraceablePeerConnection.prototype._adjustLocalMediaDirection = function(localDes
  * @private
  */
 TraceablePeerConnection.prototype._adjustRemoteMediaDirection = function(remoteDescription) {
-	if (this.isP2P) {
-		logger.info(`inytelog adjustRemoteMediaDirection, P2P`);
-	} else {
-		logger.info(`inytelog adjustRemoteMediaDirection, JVB`);
-	}
     const transformer = new SdpTransformWrap(remoteDescription.sdp);
 
     [ MediaType.AUDIO, MediaType.VIDEO ].forEach(mediaType => {
@@ -2531,11 +2254,6 @@ TraceablePeerConnection.prototype._adjustRemoteMediaDirection = function(remoteD
  * @returns {RTCSessionDescription} the munged description.
  */
 TraceablePeerConnection.prototype._mungeOpus = function(description) {
-	if (this.isP2P) {
-		logger.info(`inytelog mungeOpus, P2P`);
-	} else {
-		logger.info(`inytelog mungeOpus, JVB`);
-	}
     const { audioQuality } = this.options;
 
     if (!audioQuality?.stereo && !audioQuality?.opusMaxAverageBitrate) {
@@ -2604,11 +2322,6 @@ TraceablePeerConnection.prototype._mungeOpus = function(description) {
  * @returns {RTCSessionDescription} the munged description.
  */
 TraceablePeerConnection.prototype._mungeInactive = function(description) {
-	if (this.isP2P) {
-		logger.info(`inytelog mungeInactive, P2P`);
-	} else {
-		logger.info(`inytelog mungeInactive, JVB`);
-	}
     const parsedSdp = transform.parse(description.sdp);
     const mLines = parsedSdp.media;
 
@@ -2628,11 +2341,6 @@ TraceablePeerConnection.prototype._mungeInactive = function(description) {
  * Sets up the _dtlsTransport object and initializes callbacks for it.
  */
 TraceablePeerConnection.prototype._initializeDtlsTransport = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog initializeDtlsTransport, P2P`);
-	} else {
-		logger.info(`inytelog initializeDtlsTransport, JVB`);
-	}
     // We are assuming here that we only have one bundled transport here
     if (!this.peerconnection.getSenders || this._dtlsTransport) {
         return;
@@ -2660,11 +2368,6 @@ TraceablePeerConnection.prototype._initializeDtlsTransport = function() {
  * @returns RTCSessionDescription
  */
 TraceablePeerConnection.prototype._setVp9MaxBitrates = function(description) {
-	if (this.isP2P) {
-		logger.info(`inytelog setVp9MaxBitrates, P2P`);
-	} else {
-		logger.info(`inytelog setVp9MaxBitrates, JVB`);
-	}
     if (!this.codecPreference) {
         return description;
     }
@@ -2734,11 +2437,6 @@ TraceablePeerConnection.prototype._setVp9MaxBitrates = function(description) {
  * @returns {Promise} promise that will be resolved when the operation is successful and rejected otherwise.
  */
 TraceablePeerConnection.prototype.configureSenderVideoEncodings = function(localVideoTrack = null) {
-	if (this.isP2P) {
-		logger.info(`inytelog configureSenderVideoEncodings, P2P`);
-	} else {
-		logger.info(`inytelog configureSenderVideoEncodings, JVB`);
-	}
     if (FeatureFlags.isSourceNameSignalingEnabled()) {
         if (localVideoTrack) {
             return this.setSenderVideoConstraints(
@@ -2764,15 +2462,10 @@ TraceablePeerConnection.prototype.configureSenderVideoEncodings = function(local
 };
 
 TraceablePeerConnection.prototype.setLocalDescription = function(description) {
-	if (this.isP2P) {
-		logger.info(`inytelog setLocalDescription, P2P`);
-	} else {
-		logger.info(`inytelog setLocalDescription, JVB`);
-	}
     let localDescription = description;
 
     this.trace('setLocalDescription::preTransform', dumpSDP(localDescription));
-	
+	logger.info(`inytelogSLD pre-transformSDP`, dumpSDP(localDescription));
 
     // Munge stereo flag and opusMaxAverageBitrate based on config.js
     localDescription = this._mungeOpus(localDescription);
@@ -2785,7 +2478,6 @@ TraceablePeerConnection.prototype.setLocalDescription = function(description) {
     // Munge the order of the codecs based on the preferences set through config.js.
     localDescription = this._mungeCodecOrder(localDescription);
     localDescription = this._setVp9MaxBitrates(localDescription);
-	logger.info(`inytelogSLD pre-transformSDP`, dumpSDP(localDescription));
 
     this.trace('setLocalDescription::postTransform', dumpSDP(localDescription));
 
@@ -2825,11 +2517,6 @@ TraceablePeerConnection.prototype.setLocalDescription = function(description) {
  * @public
  */
 TraceablePeerConnection.prototype.setAudioTransferActive = function(active) {
-	if (this.isP2P) {
-		logger.info(`inytelog setAudioTransferActive, P2P`);
-	} else {
-		logger.info(`inytelog setAudioTransferActive, JVB`);
-	}
     logger.debug(`${this} audio transfer active: ${active}`);
     const changed = this.audioTransferActive !== active;
 
@@ -2846,14 +2533,10 @@ TraceablePeerConnection.prototype.setAudioTransferActive = function(active) {
 };
 
 TraceablePeerConnection.prototype.setRemoteDescription = function(description) {
-	if (this.isP2P) {
-		logger.info(`inytelog setRemoteDescription, P2P`);
-	} else {
-		logger.info(`inytelog setRemoteDescription, JVB`);
-	}
     let remoteDescription = description;
 
     this.trace('setRemoteDescription::preTransform', dumpSDP(description));
+	logger.info(`inytelogSRD pre-transformSDP`, dumpSDP(description));
 
     // Munge stereo flag and opusMaxAverageBitrate based on config.js
     remoteDescription = this._mungeOpus(remoteDescription);
@@ -2889,8 +2572,6 @@ TraceablePeerConnection.prototype.setRemoteDescription = function(description) {
 
     // Munge the order of the codecs based on the preferences set through config.js.
     remoteDescription = this._mungeCodecOrder(remoteDescription);
-	remoteDescription = this._setBandWithForVideo(remoteDescription,false);
-	logger.info(` inytelogSRD pre-transformSDP`, dumpSDP(remoteDescription));
     this.trace('setRemoteDescription::postTransform (munge codec order)', dumpSDP(remoteDescription));
 
     return new Promise((resolve, reject) => {
@@ -2925,11 +2606,6 @@ TraceablePeerConnection.prototype.setRemoteDescription = function(description) {
  * @returns {Promise} promise that will be resolved when the operation is successful and rejected otherwise.
  */
 TraceablePeerConnection.prototype.setSenderVideoConstraints = function(frameHeight, localVideoTrack) {
-	if (this.isP2P) {
-		logger.info(`inytelog setSenderVideoConstraints, P2P`);
-	} else {
-		logger.info(`inytelog setSenderVideoConstraints, JVB`);
-	}
     if (frameHeight < 0) {
         throw new Error(`Invalid frameHeight: ${frameHeight}`);
     }
@@ -3044,11 +2720,6 @@ TraceablePeerConnection.prototype.setSenderVideoConstraints = function(frameHeig
  * @public
  */
 TraceablePeerConnection.prototype.setVideoTransferActive = function(active) {
-	if (this.isP2P) {
-		logger.info(`inytelog setVideoTransferActive, P2P`);
-	} else {
-		logger.info(`inytelog setVideoTransferActive, JVB`);
-	}
     logger.debug(`${this} video transfer active: ${active}`);
     const changed = this.videoTransferActive !== active;
 
@@ -3074,11 +2745,6 @@ TraceablePeerConnection.prototype.setVideoTransferActive = function(active) {
  * @returns {void}
  */
 TraceablePeerConnection.prototype.sendTones = function(tones, duration = 200, interToneGap = 200) {
-	if (this.isP2P) {
-		logger.info(`inytelog sendTones, P2P`);
-	} else {
-		logger.info(`inytelog sendTones, JVB`);
-	}
     if (!this._dtmfSender) {
         if (this.peerconnection.getSenders) {
             const rtpSender = this.peerconnection.getSenders().find(s => s.dtmf);
@@ -3128,11 +2794,6 @@ TraceablePeerConnection.prototype.sendTones = function(tones, duration = 200, in
  * @returns {void}
  */
 TraceablePeerConnection.prototype._onToneChange = function(event) {
-	if (this.isP2P) {
-		logger.info(`inytelog onToneChange, P2P`);
-	} else {
-		logger.info(`inytelog onToneChange, JVB`);
-	}
     // An empty event.tone indicates the current tones have finished playing.
     // Automatically start playing any queued tones on finish.
     if (this._dtmfSender && event.tone === '' && this._dtmfTonesQueue.length) {
@@ -3147,11 +2808,6 @@ TraceablePeerConnection.prototype._onToneChange = function(event) {
  * the recvonly video stream.
  */
 TraceablePeerConnection.prototype.generateRecvonlySsrc = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog generateRecvonlySsrc, P2P`);
-	} else {
-		logger.info(`inytelog generateRecvonlySsrc, JVB`);
-	}
     const newSSRC = SDPUtil.generateSsrc();
 
     logger.info(`${this} generated new recvonly SSRC=${newSSRC}`);
@@ -3163,11 +2819,6 @@ TraceablePeerConnection.prototype.generateRecvonlySsrc = function() {
  * SSRC.
  */
 TraceablePeerConnection.prototype.clearRecvonlySsrc = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog clearRecvonlySsrc, P2P`);
-	} else {
-		logger.info(`inytelog clearRecvonlySsrc, JVB`);
-	}
     logger.info(`${this} Clearing primary video SSRC!`);
     this.sdpConsistency.clearVideoSsrcCache();
 };
@@ -3178,11 +2829,6 @@ TraceablePeerConnection.prototype.clearRecvonlySsrc = function() {
  * them.
  */
 TraceablePeerConnection.prototype.close = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog close, P2P`);
-	} else {
-		logger.info(`inytelog close, JVB`);
-	}
     this.trace('stop');
 
     // Off SignalingEvents
@@ -3216,31 +2862,16 @@ TraceablePeerConnection.prototype.close = function() {
 };
 
 TraceablePeerConnection.prototype.createAnswer = function(constraints) {
-	if (this.isP2P) {
-		logger.info(`inytelog createAnswer, P2P`);
-	} else {
-		logger.info(`inytelog createAnswer, JVB`);
-	}
     return this._createOfferOrAnswer(false /* answer */, constraints);
 };
 
 TraceablePeerConnection.prototype.createOffer = function(constraints) {
-	if (this.isP2P) {
-		logger.info(`inytelog createOffer, P2P`);
-	} else {
-		logger.info(`inytelog createOffer, JVB`);
-	}
     return this._createOfferOrAnswer(true /* offer */, constraints);
 };
 
 TraceablePeerConnection.prototype._createOfferOrAnswer = function(
         isOffer,
         constraints) {
-	if (this.isP2P) {
-		logger.info(`inytelog _createOfferOrAnswer, P2P`);
-	} else {
-		logger.info(`inytelog _createOfferOrAnswer, JVB`);
-	}
     const logName = isOffer ? 'Offer' : 'Answer';
 
     this.trace(`create${logName}`, JSON.stringify(constraints, null, ' '));
@@ -3380,11 +3011,6 @@ TraceablePeerConnection.prototype._createOfferOrAnswer = function(
  * @return {number|null} the primary SSRC or <tt>null</tt>
  */
 TraceablePeerConnection.prototype._extractPrimarySSRC = function(ssrcObj) {
-	if (this.isP2P) {
-		logger.info(`inytelog extractPrimarySSRC, P2P`);
-	} else {
-		logger.info(`inytelog extractPrimarySSRC, JVB`);
-	}
     if (ssrcObj && ssrcObj.groups && ssrcObj.groups.length) {
         return ssrcObj.groups[0].ssrcs[0];
     } else if (ssrcObj && ssrcObj.ssrcs && ssrcObj.ssrcs.length) {
@@ -3402,11 +3028,6 @@ TraceablePeerConnection.prototype._extractPrimarySSRC = function(ssrcObj) {
  * @private
  */
 TraceablePeerConnection.prototype._processLocalSSRCsMap = function(ssrcMap) {
-	if (this.isP2P) {
-		logger.info(`inytelog processLocalSSRCsMap, P2P`);
-	} else {
-		logger.info(`inytelog processLocalSSRCsMap, JVB`);
-	}
     for (const track of this.localTracks.values()) {
         let sourceIndex, sourceName;
 
@@ -3448,11 +3069,6 @@ TraceablePeerConnection.prototype._processLocalSSRCsMap = function(ssrcMap) {
 };
 
 TraceablePeerConnection.prototype.addIceCandidate = function(candidate) {
-	if (this.isP2P) {
-		logger.info(`inytelog addIceCandidate, P2P`);
-	} else {
-		logger.info(`inytelog addIceCandidate, JVB`);
-	}
     this.trace('addIceCandidate', JSON.stringify({
         candidate: candidate.candidate,
         sdpMid: candidate.sdpMid,
@@ -3469,11 +3085,6 @@ TraceablePeerConnection.prototype.addIceCandidate = function(candidate) {
  * @returns {number} The number of simulcast streams currently enabled or 1 when simulcast is disabled.
  */
 TraceablePeerConnection.prototype.getActiveSimulcastStreams = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog getActiveSimulcastStreams, P2P`);
-	} else {
-		logger.info(`inytelog getActiveSimulcastStreams, JVB`);
-	}
     let activeStreams = 1;
 
     if (this.isSimulcastOn() && this.encodingsEnabledState) {
@@ -3492,11 +3103,6 @@ TraceablePeerConnection.prototype.getActiveSimulcastStreams = function() {
  * the peerconnection.
  */
 TraceablePeerConnection.prototype.getStats = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog getStats, P2P`);
-	} else {
-		logger.info(`inytelog getStats, JVB`);
-	}
     return this.peerconnection.getStats();
 };
 
@@ -3508,11 +3114,6 @@ TraceablePeerConnection.prototype.getStats = function() {
  * @return {TPCSSRCInfo}
  */
 TraceablePeerConnection.prototype.generateNewStreamSSRCInfo = function(track) {
-	if (this.isP2P) {
-		logger.info(`inytelog generateNewStreamSSRCInfo, P2P`);
-	} else {
-		logger.info(`inytelog generateNewStreamSSRCInfo, JVB`);
-	}
     const rtcId = track.rtcId;
     let ssrcInfo = this._getSSRC(rtcId);
 
@@ -3570,11 +3171,6 @@ TraceablePeerConnection.prototype.generateNewStreamSSRCInfo = function(track) {
  * @returns {boolean} True if the pc uses Unified plan, false otherwise.
  */
 TraceablePeerConnection.prototype.usesUnifiedPlan = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog usesUnifiedPlan, P2P`);
-	} else {
-		logger.info(`inytelog usesUnifiedPlan, JVB`);
-	}
     return this._usesUnifiedPlan;
 };
 
@@ -3584,10 +3180,5 @@ TraceablePeerConnection.prototype.usesUnifiedPlan = function() {
  * @return {string}
  */
 TraceablePeerConnection.prototype.toString = function() {
-	if (this.isP2P) {
-		logger.info(`inytelog toString, P2P`);
-	} else {
-		logger.info(`inytelog toString, JVB`);
-	}
     return `TPC[id=${this.id},type=${this.isP2P ? 'P2P' : 'JVB'}]`;
 };
