@@ -660,7 +660,7 @@ export default class TraceablePeerConnection {
      * @param {RTCSessionDescription} description - The local description that needs to be munged.
      * @returns RTCSessionDescription
      */
-    _setVp9MaxBitrates(description: RTCSessionDescription): RTCSessionDescription;
+    _setVp9MaxBitrates(description: RTCSessionDescription, isLocal?: boolean): RTCSessionDescription;
     /**
      * Configures the stream encodings depending on the video type and the bitrates configured.
      *

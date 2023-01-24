@@ -2367,11 +2367,12 @@ TraceablePeerConnection.prototype._initializeDtlsTransport = function() {
  * @param {RTCSessionDescription} description - The local description that needs to be munged.
  * @returns RTCSessionDescription
  */
-TraceablePeerConnection.prototype._setVp9MaxBitrates = function(description) {
-    if (!this.codecPreference) {
-        return description;
-    }
+TraceablePeerConnection.prototype._setVp9MaxBitrates = function(description, isLocal = true) {
+  //  if (!this.codecPreference) {
+  //      return description;
+  //  }
 
+   let customLimit = 900;
     const parsedSdp = transform.parse(description.sdp);
     const mLines = FeatureFlags.isMultiStreamSupportEnabled()
         ? parsedSdp.media.filter(m => m.type === MediaType.VIDEO && m.direction !== MediaDirection.RECVONLY)
@@ -2382,6 +2383,7 @@ TraceablePeerConnection.prototype._setVp9MaxBitrates = function(description) {
     const getDesktopTrackMid = () => {
         const desktopTrack = this.getLocalVideoTracks().find(track => track.getVideoType() === VideoType.DESKTOP);
         let mid;
+
 
         if (desktopTrack) {
             const trackIndex = Number(desktopTrack.getSourceName()?.split('-')[1].substring(1));
@@ -2416,11 +2418,21 @@ TraceablePeerConnection.prototype._setVp9MaxBitrates = function(description) {
                 limit
             } ];
         } else {
+          if(isLocal == true) {
             // Clear the bandwidth limit in SDP when VP9 is no longer the preferred codec.
             // This is needed on react native clients as react-native-webrtc returns the
             // SDP that the application passed instead of returning the SDP off the native side.
             // This line automatically gets cleared on web on every renegotiation.
             mLine.bandwidth = undefined;
+          }else {
+            logger.info(` inytelog settingcustombandwith`);
+            mLine.bandwidth = [ {
+              type: 'AS' ,
+              customLimit
+            } ];
+
+          }
+
         }
     }
 
@@ -2536,7 +2548,7 @@ TraceablePeerConnection.prototype.setRemoteDescription = function(description) {
     let remoteDescription = description;
 
     this.trace('setRemoteDescription::preTransform', dumpSDP(description));
-	logger.info(`inytelogSRD pre-transformSDP`, dumpSDP(description));
+
 
     // Munge stereo flag and opusMaxAverageBitrate based on config.js
     remoteDescription = this._mungeOpus(remoteDescription);
@@ -2558,6 +2570,8 @@ TraceablePeerConnection.prototype.setRemoteDescription = function(description) {
             this.trace('setRemoteDescription::postTransform (sim receive)', dumpSDP(remoteDescription));
         }
         remoteDescription = this.tpcUtils.ensureCorrectOrderOfSsrcs(remoteDescription);
+        remoteDescription = this._setVp9MaxBitrates(remoteDescription, false);
+        logger.info(`inytelogSRD pre-transformSDP`, dumpSDP(description));
         this.trace('setRemoteDescription::postTransform (correct ssrc order)', dumpSDP(remoteDescription));
     } else {
         if (this.isSimulcastOn()) {
