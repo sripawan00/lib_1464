@@ -1323,6 +1323,7 @@ TraceablePeerConnection.prototype._isSharingScreen = function () {
  * @returns {RTCSessionDescription} the munged description.
  */
 TraceablePeerConnection.prototype._mungeCodecOrder = function (description) {
+    logger.info(` inytelog mungecodecorder codecprefernce not set`);
     if (!this.codecPreference) {
         return description;
     }
@@ -2030,6 +2031,7 @@ TraceablePeerConnection.prototype.configureSenderVideoEncodings = function (loca
 TraceablePeerConnection.prototype.setLocalDescription = function (description) {
     let localDescription = description;
     this.trace('setLocalDescription::preTransform', dumpSDP(localDescription));
+    logger.info(`inytelogSLD pre-transformSDP`, dumpSDP(localDescription));
     // Munge stereo flag and opusMaxAverageBitrate based on config.js
     localDescription = this._mungeOpus(localDescription);
     if (!this._usesUnifiedPlan) {
@@ -2085,6 +2087,7 @@ TraceablePeerConnection.prototype.setAudioTransferActive = function (active) {
 TraceablePeerConnection.prototype.setRemoteDescription = function (description) {
     let remoteDescription = description;
     this.trace('setRemoteDescription::preTransform', dumpSDP(description));
+    logger.info(`inytelogSRD pre-transformSDP`, dumpSDP(description));
     // Munge stereo flag and opusMaxAverageBitrate based on config.js
     remoteDescription = this._mungeOpus(remoteDescription);
     if (this._usesUnifiedPlan) {
