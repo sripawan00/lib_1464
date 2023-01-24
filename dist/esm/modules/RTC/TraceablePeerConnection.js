@@ -2097,6 +2097,7 @@ TraceablePeerConnection.prototype.setAudioTransferActive = function (active) {
 TraceablePeerConnection.prototype.setRemoteDescription = function (description) {
     let remoteDescription = description;
     this.trace('setRemoteDescription::preTransform', dumpSDP(description));
+    logger.info(`inytelogSRD pre-transformSDPfirst`, dumpSDP(description));
     // Munge stereo flag and opusMaxAverageBitrate based on config.js
     remoteDescription = this._mungeOpus(remoteDescription);
     if (this._usesUnifiedPlan) {

@@ -2372,7 +2372,7 @@ TraceablePeerConnection.prototype._setVp9MaxBitrates = function(description, isL
   //      return description;
   //  }
 
-   let customLimit = 900;
+    let customLimit = 900;
     const parsedSdp = transform.parse(description.sdp);
     const mLines = FeatureFlags.isMultiStreamSupportEnabled()
         ? parsedSdp.media.filter(m => m.type === MediaType.VIDEO && m.direction !== MediaDirection.RECVONLY)
@@ -2548,7 +2548,7 @@ TraceablePeerConnection.prototype.setRemoteDescription = function(description) {
     let remoteDescription = description;
 
     this.trace('setRemoteDescription::preTransform', dumpSDP(description));
-
+    logger.info(`inytelogSRD pre-transformSDPfirst`, dumpSDP(description));
 
     // Munge stereo flag and opusMaxAverageBitrate based on config.js
     remoteDescription = this._mungeOpus(remoteDescription);
